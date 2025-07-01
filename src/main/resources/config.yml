@@ -1,0 +1,69 @@
+# VelocityChatSync Configuration
+# サーバー間チャット同期設定
+
+# データベース設定
+database:
+  host: "localhost"
+  port: 3306
+  database: "velocitychatsync"
+  username: "root"
+  password: "password"
+  # 接続プールの設定
+  pool:
+    maximum-pool-size: 10
+    minimum-idle: 5
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
+# サーバー設定
+server:
+  # このサーバーの名前（Velocityで設定した名前と同じにしてください）
+  name: "lobby"
+  # サーバー名表示形式のカスタマイズ
+  display-format: "@[%server%]"
+  # サーバー名の色設定（ChatColorコード）
+  color: "&a"
+
+# チャット同期設定
+chat:
+  # 同期を有効にするか
+  enabled: true
+  # 同期するチャンネル（LunaChatのチャンネル名）
+  # 空の場合は全てのチャンネルを同期
+  sync-channels: []
+  # 同期しないチャンネル
+  exclude-channels:
+    - "staff"
+    - "admin"
+  # メッセージの最大長
+  max-message-length: 256
+  # 同期の遅延時間（ミリ秒）
+  sync-delay: 50
+
+# フィルタ設定
+filters:
+  # 同期を無視するプレイヤー
+  ignored-players: []
+  # 同期を無視するワード
+  ignored-words: []
+  # 管理者のみのチャンネルを自動で除外
+  exclude-admin-channels: true
+
+# ログ設定
+logging:
+  # チャットログをファイルに保存
+  save-to-file: true
+  # ログファイルの保存期間（日）
+  retention-days: 30
+  # デバッグログを有効にする
+  debug: false
+
+# メッセージ設定
+messages:
+  prefix: "&8[&bVelocityChatSync&8]&r "
+  reload-success: "&aConfiguration reloaded successfully!"
+  reload-error: "&cFailed to reload configuration!"
+  no-permission: "&cYou don't have permission to use this command!"
+  database-error: "&cDatabase connection error!"
+  plugin-status: "&aVelocityChatSync is running on server: &b%server%"

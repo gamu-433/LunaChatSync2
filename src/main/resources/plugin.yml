@@ -1,0 +1,22 @@
+name: LunaChatSync2
+version: '1.0.0'
+main: me.petoma21.lunaChatSync2.LunaChatSync2
+api-version: '1.21'
+prefix: [ LCS ]
+authors: [ Petoma21 ]
+description: Cross-server chat synchronization plugin for Velocity networks with LunaChat integration
+depend: [LunaChat]
+
+commands:
+  vchatsync:
+    description: VelocityChatSync main command
+    usage: /vchatsync <reload|status>
+    permission: velocitychatsync.admin
+
+permissions:
+  velocitychatsync.admin:
+    description: Allows access to VelocityChatSync admin commands
+    default: op
+  velocitychatsync.bypass:
+    description: Bypasses chat synchronization
+    default: false

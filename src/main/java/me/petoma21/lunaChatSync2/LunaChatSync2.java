@@ -72,7 +72,7 @@ public final class LunaChatSync2 extends JavaPlugin {
             return false;
         }
 
-        public static VelocityChatSyncPlugin getInstance() {
+        public static LunaChatSync2 getInstance() {
             return instance;
         }
 

@@ -5,8 +5,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
-
-import com.github.ucchyocean.lc3.event.LunaChatPostChatEvent;
+import org.bukkit.command.CommandSender;
+import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitChannelChatEvent;
 import me.petoma21.lunaChatSync2.LunaChatSync2;
 import me.petoma21.lunaChatSync2.config.ConfigManager;
 import me.petoma21.lunaChatSync2.models.ChatMessage;
@@ -21,24 +21,27 @@ public class ChatListener implements Listener {
         this.configManager = plugin.getConfigManager();
     }
 
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onLunaChatPost(LunaChatPostChatEvent event) {
-        // デバッグログ
-        if (configManager.isDebugEnabled()) {
-            plugin.getLogger().info("LunaChat event received: " + event.getPlayer().getName() +
-                    " in channel " + event.getChannel().getName());
+    public void onLunaChatPost(LunaChatBukkitChannelChatEvent event) {
+        CommandSender sender = (CommandSender) event.getMember();
+        if (!(sender instanceof Player)) {
+            return; // プレイヤー以外（コンソールなど）は無視
         }
 
-        Player player = event.getPlayer();
+        Player player = (Player) sender;
         String channelName = event.getChannel().getName();
-        String originalMessage = event.getOriginalMessage();
+        String originalMessage = event.getPreReplaceMessage();
 
-        // フィルタリングチェック
+        if (configManager.isDebugEnabled()) {
+            plugin.getLogger().info("LunaChat event received: " + player.getName() +
+                    " in channel " + channelName);
+        }
+
         if (!shouldSyncMessage(player, channelName, originalMessage)) {
             return;
         }
 
-        // チャットメッセージオブジェクトの作成
         ChatMessage chatMessage = new ChatMessage(
                 configManager.getServerName(),
                 player.getName(),
@@ -47,7 +50,6 @@ public class ChatListener implements Listener {
                 originalMessage
         );
 
-        // 非同期でデータベースに保存
         plugin.getDatabaseManager().saveChatMessage(chatMessage).thenRun(() -> {
             if (configManager.isDebugEnabled()) {
                 plugin.getLogger().info("Chat message saved: " + chatMessage.getMessageId());
@@ -57,6 +59,7 @@ public class ChatListener implements Listener {
             return null;
         });
     }
+
 
     private boolean shouldSyncMessage(Player player, String channelName, String message) {
         // プラグインが無効な場合
@@ -91,3 +94,4 @@ public class ChatListener implements Listener {
 
         return true;
     }
+}

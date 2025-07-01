@@ -94,9 +94,9 @@ public class ChatSyncManager {
                         message.getMessage()
                 );
 
-                // 指定チャンネルにメッセージを送信
-                api.sendMessage(null, message.getChannelName(),
-                        displayMessage, "[VelocityChatSync]", true);
+//                // 指定チャンネルにメッセージを送信
+//                api.sendMessage(null, message.getChannelName(),
+//                        displayMessage, "[VelocityChatSync]", true);
 
                 if (configManager.isDebugEnabled()) {
                     plugin.getLogger().info("Broadcasted message from " +
